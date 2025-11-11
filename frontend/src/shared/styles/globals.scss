@@ -1,0 +1,23 @@
+@use "./tokens" as *;
+
+/* Assure-toi que tout le document prend bien 100% de la hauteur */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* Couleur de fond globale et texte par défaut */
+body {
+  background: $bg;
+  color: $text;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+  "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+  "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Style global des liens */
+a {
+  color: inherit;
+  text-decoration: none;
+}

@@ -1,0 +1,286 @@
+// ──────────────────────────────────────────────
+// Student.module.scss — Final version
+// Fix: banner glued to form, clean minimal spacing above.
+// Dependencies: shared/styles/tokens.scss, shared/styles/mixins.scss
+// ──────────────────────────────────────────────
+
+@use '../../shared/styles/tokens' as *;
+@use '../../shared/styles/mixins' as *;
+
+/* ──────────────────────────────────────────────
+   PAGE CONTAINER
+   ────────────────────────────────────────────── */
+.container {
+  min-height: 100dvh;
+  background-color: $bg;
+  color: $text;
+  padding: 1rem;
+
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  row-gap: 0; /* ✅ remove default vertical gap completely */
+
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ──────────────────────────────────────────────
+   TITLES
+   ────────────────────────────────────────────── */
+.title {
+  margin: 0 0 0.25rem 0; /* small gap below title */
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 0 0 0.5rem 0; /* subtle space before success banner */
+  color: $muted;
+}
+
+/* ──────────────────────────────────────────────
+   SUCCESS BANNER — fine, green, glued to form
+   ────────────────────────────────────────────── */
+.alertSuccess {
+  background-color: #d1fae5; /* light green background */
+  border: 1px solid #10b981; /* main green border */
+  color: #065f46;            /* dark green text */
+  @include radius;
+
+  display: flex;
+  align-items: center;
+  height: 65px;              /* same as card header */
+  padding: 0 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.2;
+
+  margin: 0; /* ✅ glued to the next element (form) */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* ──────────────────────────────────────────────
+   FORM GRID
+   ────────────────────────────────────────────── */
+.form {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: start;
+  grid-auto-rows: auto;
+
+  /* ✅ sits directly under the banner */
+  margin-top: 0;
+}
+
+.cardsGrid,
+.actions {
+  display: contents;
+}
+
+/* ──────────────────────────────────────────────
+   CARD BASE
+   ────────────────────────────────────────────── */
+.card {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  background-color: $surface;
+  border: 1px solid $border;
+  @include radius;
+
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+
+  align-self: start;
+  height: auto;
+  min-height: 0;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid $border;
+  padding: 0.875rem 1rem;
+}
+
+.cardTitle {
+  margin: 0;
+  font-weight: 700;
+}
+
+.cardBody {
+  display: grid;
+  row-gap: 0.75rem;
+  padding: 0.75rem 1rem 0.5rem;
+
+  label {
+    display: block;
+    margin: 0 0 0.375rem 0;
+    font-weight: 600;
+    color: $text;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    background-color: $input-bg;
+    border: 1px solid $input-border;
+    color: $text;
+    @include radius;
+    padding: 0.5rem 0.75rem;
+
+    @include transition(background-color);
+    @include transition(border-color);
+    @include transition(box-shadow);
+    @include transition(color);
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+
+    &::placeholder {
+      color: $muted;
+      opacity: 1;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   ACTION BUTTONS
+   ────────────────────────────────────────────── */
+.actions {
+  grid-column: 1 / -1;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* shared button style */
+.actions > button,
+.actions > .button {
+  width: 140px;
+  height: 140px;
+  border-radius: 12px !important;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+}
+
+/* Add member button (neutral) */
+.actions > button.addMember,
+.actions > .button.addMember {
+  background-color: $surface;
+  color: $text;
+  border: 1px solid $border;
+
+  &:hover {
+    background-color: lighten($surface, 4%);
+    border-color: darken($border, 4%);
+    box-shadow: 0 10px 26px rgba(2, 6, 23, .08);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+/* Create group button (accent) */
+.actions > button.createGroup,
+.actions > .button.createGroup {
+  background-color: $accent;
+  color: $on-accent;
+  border: 1px solid $accent;
+
+  &:hover {
+    background-color: $accent-hover;
+    border-color: $accent-hover;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   RESPONSIVE
+   ────────────────────────────────────────────── */
+
+/* Desktop: 4 fixed columns */
+@media (min-width: 1024px) {
+  .form {
+    grid-template-columns: repeat(4, 300px);
+    justify-content: center;
+    column-gap: 0.875rem;
+    row-gap: 0.875rem;
+  }
+
+  .card,
+  .actions > button,
+  .actions > .button {
+    grid-column: auto;
+  }
+}
+
+/* Tablet: 2 fixed columns */
+@media (max-width: 1023px) and (min-width: 700px) {
+  .form {
+    grid-template-columns: repeat(2, 300px);
+    justify-content: center;
+    column-gap: 0.875rem;
+    row-gap: 0.875rem;
+  }
+
+  .card,
+  .actions > button,
+  .actions > .button {
+    grid-column: auto;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+}
+
+/* Mobile: 1 fixed column */
+@media (max-width: 699px) {
+  .form {
+    grid-template-columns: 300px;
+    justify-content: center;
+    row-gap: 0.875rem;
+  }
+
+  .card,
+  .actions > button,
+  .actions > .button {
+    grid-column: auto;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,98 @@
+// ──────────────────────────────────────────────
+// ProjectGroupsSection.module.scss — seamless continuation of Editing form card
+// Dependencies: shared/styles/tokens.scss, shared/styles/mixins.scss
+// ──────────────────────────────────────────────
+
+@use '../../shared/styles/tokens' as *;
+@use '../../shared/styles/mixins' as *;
+
+/* Section wrapping the list of groups — same look as form card */
+.section {
+  background-color: $surface;
+  border: 1px solid $border;
+  border-top: none; /* blend with form card above */
+  border-radius: 0 0 $radius $radius;
+  padding: 1rem;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+
+  display: grid;
+  row-gap: 0.75rem;
+}
+
+/* Title aligned with form heading */
+.title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: $text;
+}
+
+/* Error message */
+.error {
+  background-color: lighten($input-bg, 2%);
+  border: 1px solid $border;
+  color: $text;
+  @include radius;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.3;
+}
+
+/* Group list */
+.groupList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  row-gap: 0.75rem;
+}
+
+/* Individual group card */
+.groupItem {
+  background-color: lighten($surface, 2%);
+  border: 1px solid $border;
+  @include radius;
+  padding: 0.75rem 0.875rem;
+  display: grid;
+  row-gap: 0.5rem;
+
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+
+  &:hover {
+    background-color: lighten($surface, 5%);
+    border-color: darken($border, 4%);
+    box-shadow: 0 6px 16px rgba(2, 6, 23, .06);
+  }
+}
+
+/* Group name */
+.groupName {
+  font-weight: 700;
+  font-size: 1rem;
+  color: $text;
+  margin: 0;
+}
+
+/* Member list inside a group */
+.memberList {
+  list-style: none;
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  row-gap: 0.25rem;
+  color: $text;
+  font-size: 0.9375rem;
+
+  li {
+    line-height: 1.3;
+  }
+
+  em {
+    color: $muted;
+  }
+}

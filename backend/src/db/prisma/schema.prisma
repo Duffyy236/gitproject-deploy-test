@@ -1,0 +1,75 @@
+// ──────────── Prisma Configuration ────────────
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"                  // ✅ Compatible MariaDB
+  url      = env("DATABASE_URL")
+}
+
+// ──────────── Enseignants (Profs) ────────────
+model Teacher {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String
+  githubToken  String    // ✅ obligatoire
+
+  projects     Project[] @relation("TeacherProjects")
+}
+
+// ──────────── Projets ────────────
+model Project {
+  id               Int       @id @default(autoincrement())
+  key              String    @unique                   // clé publique pour inscription
+  name             String
+  organization     String                              // ✅ obligatoire (org GitHub)
+  groupSizeMin     Int       @default(1) @db.UnsignedInt
+  groupSizeMax     Int?                       @db.UnsignedInt
+  groupNamePattern String                              // ex: "G-${n}"
+
+  teacherId Int
+  teacher   Teacher   @relation("TeacherProjects", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  groups        Group[]        // groupes de ce projet
+  groupMembers  GroupMember[]  // back-relation requise pour GroupMember.project
+
+  @@index([teacherId])
+}
+
+// ──────────── Groupes ────────────
+model Group {
+  id        Int      @id @default(autoincrement())
+  name      String   // obligatoire ; généré selon groupNamePattern
+  projectId Int
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  members   GroupMember[]
+
+  @@unique([projectId, name])  // nom unique par projet
+  @@index([projectId])
+}
+
+// ──────────── Étudiants ────────────
+model Student {
+  id          Int      @id @default(autoincrement())
+  name        String
+  githubEmail String   @unique      // identifiant unique
+
+  groupMembers GroupMember[]        // back-relation requise pour GroupMember.student
+}
+
+// ──────────── Liaison Groupe ↔ Étudiant ────────────
+model GroupMember {
+  groupId   Int
+  studentId Int
+  projectId Int   // dénormalisé pour l’unicité par projet
+
+  group     Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, studentId])        // pas 2x le même étudiant dans le même groupe
+  @@unique([studentId, projectId])  // pas 2 groupes pour un étudiant dans le même projet
+  @@index([projectId])
+}

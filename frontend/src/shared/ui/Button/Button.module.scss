@@ -1,0 +1,171 @@
+// ──────────────────────────────────────────────
+// Button.module.scss — token-driven button styles
+// Dependencies: shared/styles/tokens.scss, shared/styles/mixins.scss
+// ──────────────────────────────────────────────
+
+@use '../../../shared/styles/tokens' as *; // adjust the relative path if needed
+@use '../../../shared/styles/mixins' as *;
+
+// Base button
+.button {
+  // Layout & typography
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.625rem 0.875rem; // can be mapped to spacing tokens later
+  user-select: none;
+  text-decoration: none;
+
+  // Visuals from tokens
+  @include radius;
+  @include transition(background-color);
+  @include transition(color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+
+  border: 1px solid transparent;
+  box-shadow: none;
+
+  // Interactions
+  cursor: pointer;
+
+  // Disabled state
+  &:disabled,
+  &[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Focus state (keyboard)
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   VARIANTS
+   Supports data-attributes or legacy classes:
+   - data-variant="primary" | "secondary" | "ghost"
+   - .primary / .secondary / .ghost
+   ────────────────────────────────────────────── */
+
+/* Primary */
+.button[data-variant='primary'],
+.button.primary {
+  background-color: $accent;
+  color: $on-accent;
+  border-color: $accent;
+
+  &:hover {
+    background-color: $accent-hover;
+    border-color: $accent-hover;
+  }
+
+  &:active {
+    background-color: $accent-hover;
+    border-color: $accent-hover;
+    transform: translateY(0.5px);
+  }
+}
+
+/* Secondary (neutral outline) */
+.button[data-variant='secondary'],
+.button.secondary {
+  background-color: $surface;
+  color: $text;
+  border-color: $border;
+
+  &:hover {
+    background-color: lighten($surface, 2%);
+    border-color: darken($border, 4%);
+  }
+
+  &:active {
+    background-color: lighten($surface, 1%);
+    border-color: darken($border, 6%);
+    transform: translateY(0.5px);
+  }
+}
+
+/* Ghost (optional, if you already have it in the API) */
+.button[data-variant='ghost'],
+.button.ghost {
+  background-color: transparent;
+  color: $text;
+  border-color: transparent;
+
+  &:hover {
+    background-color: rgba(2, 6, 23, 0.04);
+  }
+
+  &:active {
+    background-color: rgba(2, 6, 23, 0.06);
+    transform: translateY(0.5px);
+  }
+}
+
+/* ──────────────────────────────────────────────
+   SIZES
+   data-size="sm|md|lg" or legacy class .sm|.md|.lg
+   ────────────────────────────────────────────── */
+
+.button[data-size='sm'],
+.button.sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.button[data-size='md'],
+.button.md,
+.button:not([data-size]) { // default
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+}
+
+.button[data-size='lg'],
+.button.lg {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+/* Icon-only variant (square button) */
+.button[data-icon='true'],
+.button.icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+}
+
+/* Loading state (if you toggle .is-loading) */
+.button.is-loading {
+  position: relative;
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 999px;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-top-color: $on-accent;
+    margin-left: 0.375rem;
+    animation: spin 0.9s linear infinite;
+  }
+}
+
+/* Optional elevated variant */
+.button--elevated {
+  @include elevation;
+}
+
+/* Simple spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,74 @@
+// Prisma schema complet
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------ Enseignants (Profs) ------------
+model Teacher {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String
+  githubToken  String
+  projects     Project[] @relation("TeacherProjects")
+}
+
+// ------------ Projets ------------
+model Project {
+  id               Int    @id @default(autoincrement())
+  key              String @unique
+  name             String
+  organization     String
+  groupSizeMin     Int    @default(1) @db.UnsignedInt
+  groupSizeMax     Int?   @db.UnsignedInt
+  groupNamePattern String
+
+  teacherId Int
+  teacher   Teacher @relation("TeacherProjects", fields: [teacherId], references: [id], onDelete: Cascade)
+
+  groups       Group[]
+  groupMembers GroupMember[]
+
+  @@index([teacherId])
+}
+
+// ------------ Groupes ------------
+model Group {
+  id        Int           @id @default(autoincrement())
+  name      String
+  projectId Int
+  project   Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  members   GroupMember[]
+
+  @@unique([projectId, name])
+  @@index([projectId])
+}
+
+// ------------ �tudiants ------------
+model Student {
+  id           Int           @id @default(autoincrement())
+  name         String
+  githubEmail  String        @unique
+  groupMembers GroupMember[]
+}
+
+// ------------ Liaison Groupe ? �tudiant ------------
+model GroupMember {
+  groupId   Int
+  studentId Int
+  projectId Int
+
+  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, studentId])
+  @@unique([studentId, projectId])
+  @@index([projectId])
+}

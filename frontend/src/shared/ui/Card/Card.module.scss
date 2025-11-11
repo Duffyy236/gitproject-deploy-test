@@ -1,0 +1,185 @@
+// ──────────────────────────────────────────────
+// Card.module.scss — token-driven card styles
+// Dependencies: shared/styles/tokens.scss, shared/styles/mixins.scss
+// ──────────────────────────────────────────────
+
+@use '../../../shared/styles/tokens' as *; // adjust the relative path if needed
+@use '../../../shared/styles/mixins' as *;
+
+.card {
+  // Layout & base visuals
+  display: flex;
+  flex-direction: column;
+  background-color: $surface;
+  color: $text;
+  border: 1px solid $border;
+  @include radius;
+
+  // Smooth interactions
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+  @include transition(transform);
+}
+
+/* ──────────────────────────────────────────────
+   VARIANTS
+   - .card--outlined   : flat surface with border (default look)
+   - .card--elevated   : raised with soft shadow
+   - .card--subtle     : lighter border (very quiet)
+   - .card--interactive: hover/focus affordance for clickable cards
+   ────────────────────────────────────────────── */
+
+.card--outlined {
+  // Default is already outlined via $border; keep explicit class for clarity
+}
+
+.card--elevated {
+  @include elevation;
+  border-color: transparent; // cleaner edge when elevated
+}
+
+.card--subtle {
+  border-color: mix($border, $surface, 70%); // very soft outline
+}
+
+.card--interactive {
+  cursor: pointer;
+
+  &:hover {
+    @include elevation; // gentle lift on hover
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0); // settle back
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   STRUCTURE
+   Header / Content / Footer sections
+   ────────────────────────────────────────────── */
+
+.card__header,
+.card__content,
+.card__footer {
+  padding: 0.875rem 1rem; // can be mapped to spacing tokens later
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid $border;
+}
+
+.card__title {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.card__subtitle {
+  color: $muted;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.card__content {
+  // defaults to vertical flow
+}
+
+.card__footer {
+  border-top: 1px solid $border;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* ──────────────────────────────────────────────
+   MEDIA (optional)
+   Allows an image/video/illustration at the top
+   ────────────────────────────────────────────── */
+
+.card__media {
+  display: block;
+  overflow: hidden;
+  @include radius;
+
+  // Clip inner media to card radius
+  img,
+  video,
+  canvas,
+  picture {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: inherit;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   SIZES (sm | md | lg)
+   Apply on .card or via data-size on the root
+   ────────────────────────────────────────────── */
+
+.card[data-size='sm'],
+.card.sm {
+  .card__header,
+  .card__content,
+  .card__footer {
+    padding: 0.75rem 0.875rem;
+  }
+}
+
+.card[data-size='md'],
+.card.md,
+.card:not([data-size]) { // default
+  .card__header,
+  .card__content,
+  .card__footer {
+    padding: 0.875rem 1rem;
+  }
+}
+
+.card[data-size='lg'],
+.card.lg {
+  .card__header,
+  .card__content,
+  .card__footer {
+    padding: 1rem 1.25rem;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   UTILS
+   - .card__section: extra section separator
+   - .card__actions: right-aligned actions bar
+   ────────────────────────────────────────────── */
+
+.card__section {
+  padding: 0.875rem 1rem;
+  border-top: 1px solid $border;
+
+  &:first-child {
+    border-top: 0;
+  }
+}
+
+.card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Optional: make links inside card show clear focus */
+.card a:focus-visible {
+  @include focus-ring;
+}

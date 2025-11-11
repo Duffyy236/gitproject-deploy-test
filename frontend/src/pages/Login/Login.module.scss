@@ -1,0 +1,145 @@
+// ──────────────────────────────────────────────
+// Login.module.scss — token-driven login page
+// Matches: container, title, subtitle, alert, form, label, input, submit
+// Dependencies: shared/styles/tokens.scss, shared/styles/mixins.scss
+// ──────────────────────────────────────────────
+
+@use '../../shared/styles/tokens' as *;   // adjust path if needed
+@use '../../shared/styles/mixins' as *;
+
+/* Page container */
+/* Adjust vertical rhythm between heading, subtitle, and form */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  /* Reduce large space between top texts and form */
+  gap: 0.75rem; // ↓ shrink the gap (try 0.5rem if you want it tighter)
+
+  /* keep previous styles */
+  min-height: 100dvh;
+  background-color: $bg;
+  color: $text;
+  padding: 1rem;
+}
+
+
+/* Centered panel */
+.container > * {
+  // if you wrap the form in a card-like block, this ensures nice surface
+}
+
+.form {
+  width: 100%;
+  max-width: 420px;
+  background-color: $surface;
+  border: 1px solid $border;
+  @include radius;
+  @include elevation;
+
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+
+  display: grid;
+  gap: 0.875rem;
+  padding: 1.25rem;
+
+  // Optional hover affordance
+  &:hover {
+    box-shadow: 0 12px 30px rgba(2, 6, 23, 0.14);
+  }
+}
+
+/* Headings */
+.title {
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.25rem 0;
+}
+
+.subtitle {
+  color: $muted;
+  margin: 0 0 0.5rem 0;
+}
+
+/* Field group: <label><input/></label> */
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  color: $text;
+  font-weight: 600;
+}
+
+/* Inputs */
+.input {
+  appearance: none;
+  background-color: $input-bg;
+  border: 1px solid $input-border;
+  color: $text;
+  @include radius;
+  padding: 0.5rem 0.75rem;
+
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+  @include transition(color);
+
+  &::placeholder {
+    color: $muted;
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+/* Alert (neutral for now; can switch to semantic tokens later) */
+.alert {
+  background-color: lighten($input-bg, 2%);
+  border: 1px solid $border;
+  color: $text;
+  @include radius;
+  padding: 0.625rem 0.75rem;
+}
+
+/* Submit button (styled like our primary Button) */
+.submit {
+  background-color: $accent;
+  color: $on-accent;
+  border: 1px solid $accent;
+  @include radius;
+
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+
+  padding: 0.625rem 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $accent-hover;
+    border-color: $accent-hover;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

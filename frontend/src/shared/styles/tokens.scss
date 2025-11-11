@@ -1,0 +1,43 @@
+// ──────────────────────────────────────────────
+// tokens.scss — Pro Minimal (light-only)
+// Purpose: Define the base design tokens for the UI.
+// These variables are the single source of truth for
+// colors, radii, shadows, spacing, and transitions.
+// ──────────────────────────────────────────────
+
+// === Base colors =================================
+$bg:             #f7f8fa !default; // Global background
+$card:           #ffffff !default; // Surface background
+$text:           #1f2937 !default; // Primary text color (gray-800)
+$muted:          #6b7280 !default; // Secondary / muted text
+
+$input-bg:       #f3f4f6 !default; // Input background
+$input-border:   #e5e7eb !default; // Input border / neutral border
+
+// === Radii & Shadows =============================
+$radius:         14px !default;    // Consistent rounded corners
+$shadow:         0 10px 28px rgba(2, 6, 23, .12) !default; // Soft elevation shadow
+
+// === Accent & Semantic colors ====================
+$accent:         #2563eb !default; // Primary accent (buttons, links)
+$accent-hover:   #1d4ed8 !default; // Hover state for accent
+$on-accent:      #ffffff !default; // Text color on accent background
+
+$surface:        $card !default;   // Alias for raised surfaces
+$border:         $input-border !default; // Alias for neutral borders
+
+// === Focus & Transitions =========================
+$focus-ring:     rgba(37, 99, 235, .25) !default; // Subtle focus outline
+$transition-fast: 160ms !default; // Standard transition duration
+
+// === Legacy aliases (for backward compatibility) ==
+$btn:            $accent !default;     // DEPRECATED → use $accent
+$btn-text:       $on-accent !default;  // DEPRECATED → use $on-accent
+
+// === Usage guidelines ============================
+// - Do NOT hardcode hex values in components.
+// - Use $accent and $accent-hover for primary actions.
+// - Use $input-* tokens for form controls.
+// - Use $surface, $border, and $radius for cards and containers.
+// - Keep $focus-ring consistent across interactive elements.
+// - Replace all $btn / $btn-text references with the new tokens.

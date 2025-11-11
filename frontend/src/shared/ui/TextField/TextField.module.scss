@@ -1,0 +1,154 @@
+// ──────────────────────────────────────────────
+// TextField.module.scss — token-driven input styles
+// Dependencies: shared/styles/tokens.scss, shared/styles/mixins.scss
+// ──────────────────────────────────────────────
+
+@use '../../../shared/styles/tokens' as *; // adjust the relative path if needed
+@use '../../../shared/styles/mixins' as *;
+
+// Root wrapper (container for label + control + helper)
+.textfield {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem; // compact spacing between label/control/helper
+}
+
+// Label
+.textfield__label,
+.textfield label {
+  color: $text;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+// Control wrapper (for prefix/suffix or icons)
+.textfield__control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: $input-bg;
+  border: 1px solid $input-border;
+  @include radius;
+  padding: 0.5rem 0.75rem;
+
+  // Smooth interactions
+  @include transition(background-color);
+  @include transition(border-color);
+  @include transition(box-shadow);
+
+  // Focus within (keyboard focus on the input)
+  &:focus-within {
+    // keep border neutral, let the outline be the visible focus
+    outline: 2px solid $focus-ring;
+    outline-offset: 2px;
+  }
+
+  // Disabled state propagated from input
+  &[data-disabled='true'] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Prefix/Suffix slots (optional)
+.textfield__prefix,
+.textfield__suffix {
+  color: $muted;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+// The actual input/textarea
+.textfield__input,
+.textfield input,
+.textfield textarea {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: $text;
+  width: 100%;
+  line-height: 1.2;
+  font: inherit; // inherit from context
+  padding: 0; // padding handled by the control wrapper
+
+  @include transition(color);
+
+  &::placeholder {
+    color: $muted;
+    opacity: 1; // ensure consistent placeholder visibility
+  }
+
+  &:focus {
+    outline: none; // focus handled by the control wrapper via :focus-within
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   STATES
+   Supports data/aria/class for flexibility:
+   - aria-invalid="true" | .is-invalid | [data-invalid="true"]
+   - disabled via HTML attribute or data-disabled on wrapper
+   ────────────────────────────────────────────── */
+
+.textfield[aria-invalid='true'] .textfield__control,
+.textfield.is-invalid .textfield__control,
+.textfield[data-invalid='true'] .textfield__control {
+  // Use accent family for a subtle "attention" state
+  border-color: $accent-hover;
+  background-color: lighten($input-bg, 1.5%);
+}
+
+.textfield:has(input:disabled) .textfield__control,
+.textfield:has(textarea:disabled) .textfield__control,
+.textfield[data-disabled='true'] .textfield__control {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Helper / error messages */
+.textfield__helper {
+  color: $muted;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+.textfield__error,
+.textfield[aria-invalid='true'] .textfield__helper {
+  // Until semantic error tokens are added, keep it readable but not aggressive
+  color: $text;
+}
+
+/* ──────────────────────────────────────────────
+   SIZES (sm | md | lg)
+   Apply on .textfield or via data-size on wrapper
+   ────────────────────────────────────────────── */
+
+.textfield[data-size='sm'],
+.textfield.sm {
+  .textfield__control {
+    padding: 0.375rem 0.625rem;
+  }
+  .textfield__helper { font-size: 0.8125rem; }
+}
+
+.textfield[data-size='md'],
+.textfield.md,
+.textfield:not([data-size]) { // default
+  .textfield__control {
+    padding: 0.5rem 0.75rem;
+  }
+  .textfield__helper { font-size: 0.875rem; }
+}
+
+.textfield[data-size='lg'],
+.textfield.lg {
+  .textfield__control {
+    padding: 0.625rem 0.875rem;
+  }
+  .textfield__helper { font-size: 0.9375rem; }
+}

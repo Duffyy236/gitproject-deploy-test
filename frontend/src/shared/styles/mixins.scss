@@ -1,0 +1,36 @@
+// ──────────────────────────────────────────────
+// mixins.scss — shared reusable mixins
+// Purpose: provide small, consistent building blocks
+// for focus, transitions, and elevation styles.
+// ──────────────────────────────────────────────
+
+@use 'tokens' as *;
+
+// === Focus Ring =================================
+// Creates a subtle, accessible focus outline.
+// Usage: @include focus-ring;
+@mixin focus-ring {
+  outline: 2px solid $focus-ring;
+  outline-offset: 2px;
+}
+
+// === Transition ==================================
+// Adds a smooth transition to the given property.
+// Usage: @include transition(background-color);
+@mixin transition($prop: all) {
+  transition: $prop $transition-fast ease-in-out;
+}
+
+// === Elevation ===================================
+// Applies a soft shadow for raised elements.
+// Usage: @include elevation;
+@mixin elevation {
+  box-shadow: $shadow;
+}
+
+// === Radius ======================================
+// Applies the default border radius from tokens.
+// Usage: @include radius;
+@mixin radius {
+  border-radius: $radius;
+}
